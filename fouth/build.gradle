@@ -1,0 +1,15 @@
+apply plugin: "java"
+sourceSets {
+    api
+}
+task demo() {
+    println "this is a demo"
+}
+
+task copyfile(type:Copy){
+    from "src"
+    into "dist"
+    expand(
+      myname:'dalongdemo'
+    )
+}
