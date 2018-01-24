@@ -1,0 +1,4 @@
+ext {
+versionapp = "10.10";
+describe = "my app demo info"
+}

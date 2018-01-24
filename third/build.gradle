@@ -1,0 +1,82 @@
+def myappname ="my name"
+project.version = "1.0"
+apply from : "gradle.gradle"
+task first {
+    doFirst(
+        new Action(){
+           void execute(task){
+               println "Runing ${task.name}"
+           }
+        }
+    )
+}
+task app { task -> 
+   println "run ${task.name}"
+}
+task second (description:'second app'){ task -> 
+  println "Run ${task.name}"
+}
+second.dependsOn "app"
+
+task third (dependsOn:"second",description:'third app') {task->
+     println "Run ${task.name}, ${myappname}"
+}
+task appdemo {
+
+     def source = new File('source.xml')
+     def output = new File('output.txt')
+       // Define input file
+       inputs.file source
+       // Define output file
+       outputs.file output
+       doLast {
+           def xml = new XmlSlurper().parse(source)
+           output.withPrintWriter { writer ->
+               xml.person.each { person ->
+                   writer.println "${person.name},${person.email}"
+       } }
+           println "Converted ${source.name} to ${output.name}"
+       }
+
+}
+
+task myfile {
+
+    def myfile =files('source.xml','build.gradle',"app.xml");
+    File xmlfile = new File("source.xml");
+    def  inputxml =project.file(xmlfile);
+    def filterfiles = myfile.filter {
+      it.name.endsWith("xml")
+    }
+    println myfile.files
+    println filterfiles;
+ }
+
+ task filetreedemo {
+
+     def srcDir = fileTree("src/main").include("**/*.java");
+     println srcDir
+ }
+
+ task myCopy(type:Copy) {
+    from "src"
+    rename "main" , "appdemo"
+    into "mybuild"
+
+ }
+ ext {
+
+     appdemoinfo = "dalongappddddddddd"
+ }
+
+ task demo (){
+
+      def versioninfo = "$versionapp"
+      println versioninfo;
+      logger.info("this is from demo : $versionapp")
+      if (versioninfo=="rong") {
+          println "you build is prod";
+      }
+ }
+//third.message = "my app name ${myappname}"
+defaultTasks "third"
